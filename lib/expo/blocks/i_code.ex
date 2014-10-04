@@ -1,5 +1,5 @@
 defmodule Expo.Blocks.ICode do
-  defstruct attributes: [], content: ""
+  defstruct attributes: [], content: "", open: true, multi_line: true
 
   def match(line) do
     case ~r/^\s{4}(?<content>.*)?/ |> Regex.named_captures(line) do
@@ -8,5 +8,13 @@ defmodule Expo.Blocks.ICode do
       _ ->
         false
     end
+  end
+
+  def append_content(struct, content) do
+    %__MODULE__{struct | content: struct.content <> content}
+  end
+
+  def close(struct) do
+    %__MODULE__{struct | open: false}
   end
 end
